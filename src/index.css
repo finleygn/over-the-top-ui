@@ -1,0 +1,155 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000000;
+}
+
+body {
+  color: white;
+}
+
+button {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background: transparent;
+}
+
+.multi-drawer-container {
+  position: fixed;
+  top: 2.5vh;
+  left: 0px;
+  height: 100vh;
+}
+
+.multi-drawer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.multi-drawer__main {
+  height: 95vh;
+  width: 40vw;
+  top: 0;
+  background: #000000;
+  border: 3px solid #ffffff52;
+  border-left: none;
+  position: relative;
+  border-radius: 0 80px 80px 0;
+}
+
+.multi-drawer__main::before {
+  content: '';
+  height: 95vh;
+  width: 40vw;
+  top: -2px;
+  right: 100%;
+  position: absolute;
+  border: 3px solid #0a0a0a;
+  border-right: none;
+  background: #000000;
+}
+
+.multi-drawer__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  justify-content: center;
+}
+
+.draw-button {
+  aspect-ratio: 1/1;
+  width: 120px;
+  border-radius: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+* {
+  cursor: none;
+}
+
+.draw-button__plane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff6e;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 100%;
+}
+
+.draw-button__shadow {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+
+  filter: blur(10px);
+  z-index: -100;
+  border-radius: 100%;
+}
+
+.draw-button__highlight {
+  opacity: 0;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  background: #ffffff70;
+  filter: blur(30px);
+  z-index: -100;
+  border-radius: 100%;
+  transition: opacity 0.5s;
+}
+
+.draw-button__inner {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  background-color: #000000;
+  color: #ccc;
+  font-size: 28px;
+  border-radius: 100%;
+  transition: background-color 0.1s ease-out, transform 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.draw-button__inner span {
+  font-size: 0px;
+  z-index: 5;
+}
+
+.draw-button__inner span {
+  transition: transform 0.4s ease;
+  will-change: transform;
+}
+
+.draw-button:hover .draw-button__highlight {
+  opacity: 1;
+}
+
+.draw-button:hover .draw-button__inner {
+  transform: scale(0.95);
+}
+
+.draw-button:hover .draw-button__inner span {
+  transform: scale(1.05);
+}
+
+.draw-button--selected .draw-button__inner {
+  background-color: #1f1f1f;
+}
