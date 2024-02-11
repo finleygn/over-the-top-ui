@@ -14,13 +14,31 @@ const items = {
   },
   boat: {
     key: 'boat',
-    name: "Fish",
+    name: "Boat",
     cost_base: 10,
     cost_increment: 1.2
   },
   whale: {
     key: 'whale',
-    name: "Fish",
+    name: "Whale",
+    cost_base: 10,
+    cost_increment: 1.2
+  },
+  kraken: {
+    key: 'kraken',
+    name: "Kraken",
+    cost_base: 10,
+    cost_increment: 1.2
+  },
+  seal: {
+    key: 'seal',
+    name: "Seal",
+    cost_base: 10,
+    cost_increment: 1.2
+  },
+  dog: {
+    key: 'dog',
+    name: "Dog",
     cost_base: 10,
     cost_increment: 1.2
   }

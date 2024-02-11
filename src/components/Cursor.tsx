@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
-import CursorFollow from "../core/cursor";
 import useStore from "../core/store";
 import { animated, useSpring } from "@react-spring/web";
+import { cursorFollow } from "../core/store/slices/cursor_slice";
 
 function lerp(start: number, end: number, amt: number) {
   return (1 - amt) * start + amt * end
@@ -13,7 +13,7 @@ function Cursor() {
 
   const spring = useSpring({
     value: cursorState === 'highlighted' ? 1 : 0,
-    colour: cursorState === 'highlighted' ? "#CCCCFF" : "#FFF",
+    colour: cursorState === 'highlighted' ? "#AAAAFF" : "#FFF",
     config: {
       duration: 100
     }
@@ -21,10 +21,7 @@ function Cursor() {
 
   useLayoutEffect(() => {
     if (!ref.current) return;
-    new CursorFollow({
-      offsetX: -6,
-      mount: ref.current
-    })
+    cursorFollow.setMount(ref.current);
   }, []);
 
   return (

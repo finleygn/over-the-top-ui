@@ -1,7 +1,14 @@
-import { MouseEvent, ReactNode, useEffect, useState } from "react";
+import { MouseEvent, ReactNode, useEffect } from "react";
 import { animated, config, to, useSpring } from '@react-spring/web';
 import classNames from "classnames";
-import useCursor from "./hooks/useCursor";
+import useCursor from "../../hooks/useCursor";
+import DrawerPlane from "./DrawerPlane";
+
+export type DrawerProps = {
+  entranceDirection: "top" | "bottom" | "none";
+  open: boolean;
+  children: ReactNode;
+}
 
 type Drawer = {
   id: string;
@@ -12,6 +19,8 @@ type Drawer = {
 type MultiDrawerProps = {
   selected?: string;
   setSelected: (id?: string) => void;
+  open: boolean;
+  setOpen: (value: boolean) => void;
   drawers: Drawer[];
 }
 
@@ -59,7 +68,7 @@ const DrawButton = (props: DrawButtonProps) => {
               [spring.x, spring.y],
               (x, y) => `translate(${-x * 120}px, ${-y * 120}px)`
             )
-          }}></animated.div>
+          }}/>
           <span>
             {props.children}
           </span>
@@ -77,35 +86,54 @@ const DrawButton = (props: DrawButtonProps) => {
 }
 
 const MultiDrawer = (props: MultiDrawerProps) => {
-  const [open, setOpen] = useState(false);
   const drawSpring = useSpring({
-    left: open ? 1 : 0,
-    config: config.gentle
+    left: props.open ? 1 : 0,
+    config: config.gentle,
+    onRest: () => {
+      if(!props.open) props.setSelected(undefined)
+    }
   });
 
+  const setOpen = props.setOpen;
+  const selected = props.selected;
   useEffect(() => {
-    setOpen(!!props.selected);
-  }, [props.selected]);
+    setOpen(!!selected);
+  }, [setOpen, selected]);
+
+  const selectedIndex = props.drawers.findIndex(d => d.id === props.selected);
 
   return (
     <animated.div
       className='multi-drawer'
       style={{ transform: drawSpring.left.to(v => `translateX(calc((-100% + 160px) + (${v * 100}% - ${v} * 160px)))`) }}>
       <div className="multi-drawer__main">
-        {props.drawers.find(drawer => drawer.id === props.selected)?.content}
+        {props.drawers.map((drawer, index) => (
+          <DrawerPlane
+            open={props.selected === drawer.id && props.open}
+            entranceDirection={
+              selectedIndex === index || !props.open
+                ? "none"
+                : selectedIndex < index
+                  ? "top"
+                  : "bottom"
+            }
+          >
+            {drawer.content}
+          </DrawerPlane>
+        ))}
       </div>
       <nav className="multi-drawer__buttons">
         {props.drawers.map(drawer => (
           <DrawButton
             key={drawer.id}
-            selected={drawer.id === props.selected && open}
+            selected={drawer.id === props.selected && props.open}
             onClick={() => {
-              if(props.selected === drawer.id && open) {
-                setOpen(false);
+              if(props.selected === drawer.id && props.open) {
+                props.setOpen(false);
                 return;
               }
               props.setSelected(drawer.id);
-              setOpen(true)
+              props.setOpen(true)
             }}
           >
             {drawer.icon}
